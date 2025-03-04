@@ -19,7 +19,8 @@ function getWorkHours(empCheck) {
 
 let totalEmpHours = 0;
 let totalWorkingDays = 0;
-let dailyWages = []; // Array to store daily wages
+let dailyWages = [];
+let dailyHours = [];
 
 while (totalEmpHours < MAX_WORKING_HOURS && totalWorkingDays < MAX_WORKING_DAYS) {
     totalWorkingDays++;
@@ -33,12 +34,39 @@ while (totalEmpHours < MAX_WORKING_HOURS && totalWorkingDays < MAX_WORKING_DAYS)
 
     totalEmpHours += empHours;
     let dailyWage = empHours * WAGE_PER_HOUR;
-    dailyWages.push(dailyWage); // Store daily wage in array
+    
+    dailyWages.push(dailyWage);
+    dailyHours.push(empHours);
 }
 
-let totalWage = totalEmpHours * WAGE_PER_HOUR;
+// a. Calculate total Wage using reduce method
+let totalWage = dailyWages.reduce((total, wage) => total + wage, 0);
+console.log(`Total Wage using reduce: $${totalWage}`);
 
-console.log(`Total Working Days: ${totalWorkingDays}`);
-console.log(`Total Hours Worked: ${totalEmpHours}`);
-console.log(`Total Monthly Wage: $${totalWage}`);
-console.log("Daily Wages: ", dailyWages);
+// b. Show the Day along with Daily Wage using map
+let dailyWageWithDay = dailyWages.map((wage, index) => `Day ${index + 1}: $${wage}`);
+console.log("Day-wise Wages: ", dailyWageWithDay);
+
+// c. Show Days when Full-time wage of $160 was earned using filter
+let fullTimeDays = dailyWages
+    .map((wage, index) => ({ day: index + 1, wage }))
+    .filter(dayInfo => dayInfo.wage === FULL_TIME_HOURS * WAGE_PER_HOUR)
+    .map(dayInfo => `Day ${dayInfo.day}`);
+
+console.log("Days with Full-Time Wage: ", fullTimeDays);
+
+// d. Find the first occurrence when Full-Time Wage was earned using find
+let firstFullTimeDay = dailyWages.find(wage => wage === FULL_TIME_HOURS * WAGE_PER_HOUR);
+console.log(`First Full-Time Wage Earned: $${firstFullTimeDay}`);
+
+// e. Check if Every Element of Full-Time Wage is truly holding Full-Time Wage
+let isEveryFullTime = dailyWages.every(wage => wage === FULL_TIME_HOURS * WAGE_PER_HOUR);
+console.log(`Did employee work full-time every day? ${isEveryFullTime}`);
+
+// f. Check if there is any Part-Time Wage using some
+let hasPartTimeWage = dailyWages.some(wage => wage === PART_TIME_HOURS * WAGE_PER_HOUR);
+console.log(`Is there any Part-Time Wage? ${hasPartTimeWage}`);
+
+// g. Find the number of days the Employee Worked using filter
+let daysWorked = dailyHours.filter(hours => hours > 0).length;
+console.log(`Total Days Worked: ${daysWorked}`);

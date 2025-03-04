@@ -19,8 +19,7 @@ function getWorkHours(empCheck) {
 
 let totalEmpHours = 0;
 let totalWorkingDays = 0;
-let dailyWageMap = new Map();
-let dailyHourMap = new Map();
+let employeeRecords = []; // Array to store objects with Day, Hours, and Wage
 
 while (totalEmpHours < MAX_WORKING_HOURS && totalWorkingDays < MAX_WORKING_DAYS) {
     totalWorkingDays++;
@@ -35,31 +34,13 @@ while (totalEmpHours < MAX_WORKING_HOURS && totalWorkingDays < MAX_WORKING_DAYS)
     totalEmpHours += empHours;
     let dailyWage = empHours * WAGE_PER_HOUR;
 
-    // Store day-wise hours and wages in Maps
-    dailyWageMap.set(totalWorkingDays, dailyWage);
-    dailyHourMap.set(totalWorkingDays, empHours);
+    // Store data in an object and push to array
+    employeeRecords.push({
+        day: totalWorkingDays,
+        hoursWorked: empHours,
+        wageEarned: dailyWage
+    });
 }
 
-// a. Calculate total Wage and total hours worked using Arrow Function & reduce
-const totalWage = Array.from(dailyWageMap.values()).reduce((total, wage) => total + wage, 0);
-const totalHours = Array.from(dailyHourMap.values()).reduce((total, hours) => total + hours, 0);
-
-console.log(`Total Hours Worked: ${totalHours}`);
-console.log(`Total Monthly Wage: $${totalWage}`);
-
-// b. Show the full working days, part working days, and no working days
-let fullWorkingDays = Array.from(dailyHourMap.entries())
-    .filter(([day, hours]) => hours === FULL_TIME_HOURS)
-    .map(([day]) => `Day ${day}`);
-
-let partWorkingDays = Array.from(dailyHourMap.entries())
-    .filter(([day, hours]) => hours === PART_TIME_HOURS)
-    .map(([day]) => `Day ${day}`);
-
-let noWorkingDays = Array.from(dailyHourMap.entries())
-    .filter(([day, hours]) => hours === 0)
-    .map(([day]) => `Day ${day}`);
-
-console.log("Full Working Days: ", fullWorkingDays);
-console.log("Part Working Days: ", partWorkingDays);
-console.log("No Working Days: ", noWorkingDays);
+// Display employee records
+console.log("Employee Records: ", employeeRecords);

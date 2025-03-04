@@ -19,6 +19,7 @@ function getWorkHours(empCheck) {
 
 let totalEmpHours = 0;
 let totalWorkingDays = 0;
+let dailyWages = []; // Array to store daily wages
 
 while (totalEmpHours < MAX_WORKING_HOURS && totalWorkingDays < MAX_WORKING_DAYS) {
     totalWorkingDays++;
@@ -31,6 +32,8 @@ while (totalEmpHours < MAX_WORKING_HOURS && totalWorkingDays < MAX_WORKING_DAYS)
     }
 
     totalEmpHours += empHours;
+    let dailyWage = empHours * WAGE_PER_HOUR;
+    dailyWages.push(dailyWage); // Store daily wage in array
 }
 
 let totalWage = totalEmpHours * WAGE_PER_HOUR;
@@ -38,3 +41,4 @@ let totalWage = totalEmpHours * WAGE_PER_HOUR;
 console.log(`Total Working Days: ${totalWorkingDays}`);
 console.log(`Total Hours Worked: ${totalEmpHours}`);
 console.log(`Total Monthly Wage: $${totalWage}`);
+console.log("Daily Wages: ", dailyWages);
